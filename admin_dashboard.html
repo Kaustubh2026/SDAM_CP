@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>YouTube Admin Dashboard 2.0</title>
+    <!-- Include Font Awesome and Animate.css -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --youtube-red: #FF0000;
+            --youtube-dark: #282828;
+            --youtube-black: #0F0F0F;
+            --youtube-grey: #717171;
+            --youtube-light-grey: #F1F1F1;
+            --youtube-white: #FFFFFF;
+            --card-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --hover-shadow: 0 8px 15px rgba(0,0,0,0.2);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'YouTube Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        }
+
+        body {
+            background: var(--youtube-black);
+            color: var(--youtube-white);
+            min-height: 100vh;
+        }
+
+        /* Enhanced Header */
+        header {
+            background: var(--youtube-dark);
+            padding: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: var(--youtube-white);
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo i {
+            color: var(--youtube-red);
+            font-size: 2.2rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-info span {
+            font-weight: 500;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--youtube-red);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Enhanced Navigation */
+        nav {
+            background: var(--youtube-dark);
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            gap: 1rem;
+            padding: 0 1rem;
+        }
+
+        .nav-link {
+            padding: 0.8rem 1.2rem;
+            color: var(--youtube-white);
+            text-decoration: none;
+            border-radius: 25px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link i {
+            font-size: 1.2rem;
+        }
+
+        .nav-link:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-link.active {
+            background: var(--youtube-red);
+            color: var(--youtube-white);
+        }
+
+        /* Enhanced Container */
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Enhanced Controls */
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            animation: fadeInDown 0.5s ease-out;
+        }
+
+        .search-bar {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 1rem 3rem 1rem 1.5rem;
+            background: var(--youtube-dark);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 25px;
+            color: var(--youtube-white);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--youtube-red);
+            box-shadow: 0 0 0 2px rgba(255,0,0,0.2);
+        }
+
+        .search-bar i {
+            position: absolute;
+            right: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--youtube-grey);
+            transition: var(--transition);
+        }
+
+        .search-bar input:focus + i {
+            color: var(--youtube-red);
+        }
+
+        /* Enhanced Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--youtube-dark);
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .stat-card h3 {
+            color: var(--youtube-grey);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--youtube-white);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-change {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--youtube-grey);
+        }
+
+        .stat-change.positive {
+            color: #00C853;
+        }
+
+        .stat-change.negative {
+            color: var(--youtube-red);
+        }
+
+        /* Enhanced Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--youtube-dark);
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            cursor: pointer;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .card h3 {
+            color: var(--youtube-white);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .card p {
+            color: var(--youtube-grey);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card i {
+            width: 20px;
+            color: var(--youtube-red);
+        }
+
+        /* Enhanced Status Badges */
+        .status {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-top: 1rem;
+            transition: var(--transition);
+        }
+
+        .status.active {
+            background: rgba(0, 200, 83, 0.2);
+            color: #00C853;
+        }
+
+        .status.pending {
+            background: rgba(255, 152, 0, 0.2);
+            color: #FF9800;
+        }
+
+        .status.completed {
+            background: rgba(33, 150, 243, 0.2);
+            color: #2196F3;
+        }
+
+        .status.open {
+            background: rgba(255, 87, 34, 0.2);
+            color: #FF5722;
+        }
+
+        .status.resolved {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+        }
+
+        /* Enhanced Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-content {
+            background: var(--youtube-dark);
+            width: 90%;
+            max-width: 600px;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: var(--hover-shadow);
+            animation: scaleIn 0.3s ease-out;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 1rem;
+        }
+
+        .modal-content .btn-primary {
+            background: var(--youtube-red);
+            color: var(--youtube-white);
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 1rem;
+        }
+
+        .modal-content .btn-primary:hover {
+            background: #E60000;
+            transform: translateY(-2px);
+        }
+
+        /* Ratings Display */
+        .ratings-display {
+            margin-top: 1rem;
+        }
+
+        .ratings-display h4,
+        .ratings-display h5 {
+            margin-bottom: 0.5rem;
+        }
+
+        .ratings-display ul {
+            list-style: none;
+            padding-left: 0;
+            margin-bottom: 1rem;
+        }
+
+        .ratings-display li {
+            background: rgba(255,255,255,0.1);
+            padding: 0.5rem;
+            border-radius: 5px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .ratings-display li i {
+            color: var(--youtube-red);
+        }
+
+        /* Animations */
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--youtube-black);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--youtube-dark);
+            border-top-color: var(--youtube-red);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-content {
+                overflow-x: auto;
+                padding-bottom: 0.5rem;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .stat-card {
+                padding: 1rem;
+            }
+
+            .stat-value {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Spinner -->
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="#" class="logo">
+                <i class="fab fa-youtube"></i>
+                YouTube Dashboard
+            </a>
+            <div class="user-info">
+                <span id="currentTime"></span>
+                <span id="userName">Rahul Singh</span>
+                <div class="avatar" onclick="openModal('Profile', generateProfileContent())">RS</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content">
+            <a href="#" class="nav-link active" data-section="overview">
+                <i class="fas fa-home"></i> Overview
+            </a>
+            <a href="#" class="nav-link" data-section="creators">
+                <i class="fas fa-user-friends"></i> Creators
+            </a>
+            <a href="#" class="nav-link" data-section="brands">
+                <i class="fas fa-briefcase"></i> Brands
+            </a>
+            <a href="#" class="nav-link" data-section="collaborations">
+                <i class="fas fa-handshake"></i> Collaborations
+            </a>
+            <a href="#" class="nav-link" data-section="analytics">
+                <i class="fas fa-chart-bar"></i> Analytics
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Controls -->
+        <div class="controls">
+            <div class="search-bar">
+                <input type="text" placeholder="Search..." id="searchInput">
+                <i class="fas fa-search"></i>
+            </div>
+            <select class="filter-dropdown" id="statusFilter">
+                <option value="all">All Status</option>
+                <option value="active">Active</option>
+                <option value="pending">Pending</option>
+                <option value="completed">Completed</option>
+                <option value="open">Open</option>
+                <option value="resolved">Resolved</option>
+            </select>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid" id="statsGrid">
+            <!-- Will be populated by JavaScript -->
+        </div>
+
+        <!-- Content Grid -->
+        <div class="content-grid" id="contentGrid">
+            <!-- Will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle"></h2>
+            <div id="modalBody"></div>
+            <button onclick="closeModal()" class="btn-primary">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript Code
+
+        // Sample Data with Indian References
+        const dashboardData = {
+            stats: {
+                totalCreators: 5006, // Incremented by 1 for Raj
+                activeCollaborations: 1201, // Incremented by 1 for Raj-TechHub
+                totalRevenue: '₹1.5  Lakhs', // Adjusted revenue
+                pendingRequests: 50,
+                openTickets: 35,
+                monthlyGrowth: {
+                    totalCreators: 4.5,
+                    activeCollaborations: 3.0,
+                    totalRevenue: 6.2,
+                    pendingRequests: -1.8,
+                    openTickets: 2.5
+                }
+            },
+            creators: [
+                { id: 1, name: 'Technical Guruji', subscribers: '20M', category: 'Technology', status: 'active', engagement: '7.5%', recentVideos: 20, avgViews: '1M' },
+                { id: 2, name: 'BB Ki Vines', subscribers: '25M', category: 'Comedy', status: 'active', engagement: '8.2%', recentVideos: 15, avgViews: '2M' },
+                { id: 3, name: 'Amit Bhadana', subscribers: '23M', category: 'Comedy', status: 'pending', engagement: '6.8%', recentVideos: 10, avgViews: '1.5M' },
+                { id: 4, name: 'Sandeep Maheshwari', subscribers: '21M', category: 'Motivation', status: 'active', engagement: '9.5%', recentVideos: 5, avgViews: '2.5M' },
+                { id: 5, name: 'Cooking Shooking', subscribers: '7M', category: 'Food', status: 'completed', engagement: '5.9%', recentVideos: 12, avgViews: '500K' },
+                { id: 6, name: 'Raj Singh', subscribers: '1.2M', category: 'Gaming', status: 'active', engagement: '7.0%', recentVideos: 25, avgViews: '800K' } // New Creator
+            ],
+            brands: [
+                { id: 1, name: 'Local Mart', industry: 'Retail', collaborations: 25, status: 'active', budget: '₹20 Thousands', satisfaction: '4.7/5' },
+                { id: 2, name: 'Spice Hub', industry: 'Food & Spices', collaborations: 18, status: 'active', budget: '₹15 Thousands', satisfaction: '4.5/5' },
+                { id: 3, name: 'Tech Bazaar', industry: 'Technology', collaborations: 30, status: 'pending', budget: '₹30 Thousands', satisfaction: '4.6/5' },
+                { id: 4, name: 'Edu Corner', industry: 'Education', collaborations: 12, status: 'active', budget: '₹10 Thousands', satisfaction: '4.8/5' },
+                { id: 5, name: 'City Wheels', industry: 'Automobile', collaborations: 8, status: 'completed', budget: '₹25 Thousands', satisfaction: '4.9/5' },
+                { id: 6, name: 'TechHub', industry: 'Technology', collaborations: 1, status: 'active', budget: '₹5 Thousands', satisfaction: '5.0/5' } // New Brand
+            ],
+            collaborations: [
+                {
+                    id: 1,
+                    creator: 'Technical Guruji',
+                    brand: 'Tech Bazaar',
+                    status: 'active',
+                    value: '₹50 Thousands',
+                    progress: '60%',
+                    endDate: '2024-12-31',
+                    ratings: null
+                },
+                {
+                    id: 2,
+                    creator: 'BB Ki Vines',
+                    brand: 'Local Mart',
+                    status: 'pending',
+                    value: '₹70 Thousands',
+                    progress: '0%',
+                    endDate: '2024-11-30',
+                    ratings: null
+                },
+                {
+                    id: 3,
+                    creator: 'Amit Bhadana',
+                    brand: 'Spice Hub',
+                    status: 'completed',
+                    value: '₹40 Thousands',
+                    progress: '100%',
+                    endDate: '2024-10-31',
+                    ratings: {
+                        brand: {
+                            cooperation: 5,
+                            performance: 4,
+                            executionTime: 5,
+                            valueForMoney: 4
+                        },
+                        creator: {
+                            cooperation: 5,
+                            timelyPayment: 5
+                        }
+                    }
+                },
+                {
+                    id: 4,
+                    creator: 'Sandeep Maheshwari',
+                    brand: 'Edu Corner',
+                    status: 'active',
+                    value: '₹60 Thousands',
+                    progress: '80%',
+                    endDate: '2024-12-15',
+                    ratings: null
+                },
+                {
+                    id: 5,
+                    creator: 'Cooking Shooking',
+                    brand: 'City Wheels',
+                    status: 'completed',
+                    value: '₹30 Thousands',
+                    progress: '100%',
+                    endDate: '2024-09-30',
+                    ratings: {
+                        brand: {
+                            cooperation: 4,
+                            performance: 5,
+                            executionTime: 5,
+                            valueForMoney: 5
+                        },
+                        creator: {
+                            cooperation: 4,
+                            timelyPayment: 5
+                        }
+                    }
+                },
+                {
+                    id: 6,
+                    creator: 'Raj Singh',
+                    brand: 'TechHub',
+                    status: 'active',
+                    value: '₹80 Thousands',
+                    progress: '40%',
+                    endDate: '2024-12-20',
+                    ratings: null
+                } // New Collaboration
+            ],
+            tickets: [
+                { id: 1, title: 'Payment Issue', creator: 'Technical Guruji', status: 'open', priority: 'High', date: '2024-11-01' },
+                { id: 2, title: 'Content ID Claim', creator: 'BB Ki Vines', status: 'resolved', priority: 'Medium', date: '2024-10-25' },
+                { id: 3, title: 'Channel Verification', creator: 'Amit Bhadana', status: 'open', priority: 'High', date: '2024-10-30' },
+                { id: 4, title: 'Policy Violation Warning', creator: 'Sandeep Maheshwari', status: 'resolved', priority: 'Low', date: '2024-10-28' },
+                { id: 5, title: 'Ad Revenue Drop', creator: 'Cooking Shooking', status: 'open', priority: 'Medium', date: '2024-11-02' }
+            ],
+            analytics: {
+                monthlyRevenue: [
+                    { month: 'Jan', value: 1.2 },
+                    { month: 'Feb', value: 1.5 },
+                    { month: 'Mar', value: 1.8 },
+                    { month: 'Apr', value: 2.1 },
+                    { month: 'May', value: 2.5 }
+                ],
+                categoryDistribution: [
+                    { category: 'Technology', percentage: 30 },
+                    { category: 'Comedy', percentage: 25 },
+                    { category: 'Motivation', percentage: 15 },
+                    { category: 'Food', percentage: 20 },
+                    { category: 'Education', percentage: 10 }
+                ],
+                ticketStats: {
+                    totalTickets: 150,
+                    openTickets: 35,
+                    resolvedTickets: 115,
+                    averageResolutionTime: '2 days'
+                }
+            }
+        };
+
+        // Utility Functions
+        function showLoading() {
+            document.getElementById('loading').style.display = 'flex';
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        function updateCurrentTime() {
+            const now = new Date();
+            document.getElementById('currentTime').textContent = 
+                now.toLocaleTimeString('en-IN', { 
+                    hour: '2-digit', 
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+        }
+
+        function formatNumber(num) {
+            if (num >= 10000000) {
+                return (num / 10000000).toFixed(1) + ' Cr';
+            } else if (num >= 100000) {
+                return (num / 100000).toFixed(1) + ' Thousands';
+            }
+            return num.toString();
+        }
+
+        // Content Loading Functions
+        function loadStats() {
+            const statsGrid = document.getElementById('statsGrid');
+            const stats = dashboardData.stats;
+            const monthlyGrowth = stats.monthlyGrowth;
+            statsGrid.innerHTML = `
+                <div class="stat-card">
+                    <h3>Total Creators</h3>
+                    <div class="stat-value">${stats.totalCreators}</div>
+                    <div class="stat-change ${monthlyGrowth.totalCreators >= 0 ? 'positive' : 'negative'}">
+                        ${monthlyGrowth.totalCreators >= 0 ? '▲' : '▼'} ${Math.abs(monthlyGrowth.totalCreators)}% from last month
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <h3>Active Collaborations</h3>
+                    <div class="stat-value">${stats.activeCollaborations}</div>
+                    <div class="stat-change ${monthlyGrowth.activeCollaborations >= 0 ? 'positive' : 'negative'}">
+                        ${monthlyGrowth.activeCollaborations >= 0 ? '▲' : '▼'} ${Math.abs(monthlyGrowth.activeCollaborations)}% from last month
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Revenue</h3>
+                    <div class="stat-value">${stats.totalRevenue}</div>
+                    <div class="stat-change ${monthlyGrowth.totalRevenue >= 0 ? 'positive' : 'negative'}">
+                        ${monthlyGrowth.totalRevenue >= 0 ? '▲' : '▼'} ${Math.abs(monthlyGrowth.totalRevenue)}% from last month
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <h3>Open Tickets</h3>
+                    <div class="stat-value">${stats.openTickets}</div>
+                    <div class="stat-change ${monthlyGrowth.openTickets >= 0 ? 'positive' : 'negative'}">
+                        ${monthlyGrowth.openTickets >= 0 ? '▲' : '▼'} ${Math.abs(monthlyGrowth.openTickets)}% from last month
+                    </div>
+                </div>
+            `;
+        }
+
+        function loadContent(section, searchTerm = '', statusFilter = 'all') {
+            const contentGrid = document.getElementById('contentGrid');
+            let content = '';
+
+            switch(section) {
+                case 'creators':
+                case 'brands':
+                case 'collaborations':
+                case 'tickets':
+                    const data = dashboardData[section];
+                    const filteredData = data.filter(item => {
+                        const matchesSearch = Object.values(item).some(value => 
+                            String(value).toLowerCase().includes(searchTerm.toLowerCase())
+                        );
+                        const matchesStatus = statusFilter === 'all' || item.status === statusFilter;
+                        return matchesSearch && matchesStatus;
+                    });
+                    content = filteredData.map(item => `
+                        <div class="card" onclick="openModal('${item.name || item.creator || item.title}', generateDetailedView('${section}', ${item.id}))">
+                            ${generateCardContent(item, section)}
+                        </div>
+                    `).join('');
+                    break;
+                case 'analytics':
+                    content = generateAnalyticsView();
+                    break;
+                default: // Overview
+                    loadStats();
+                    content = generateOverviewContent();
+            }
+
+            contentGrid.innerHTML = content;
+        }
+
+        function generateCardContent(item, type) {
+            switch(type) {
+                case 'creators':
+                    return `
+                        <h3>${item.name}</h3>
+                        <p><i class="fas fa-users"></i> Subscribers: ${item.subscribers}</p>
+                        <p><i class="fas fa-tag"></i> Category: ${item.category}</p>
+                        <p><i class="fas fa-chart-line"></i> Engagement: ${item.engagement}</p>
+                        <p><i class="fas fa-video"></i> Recent Videos: ${item.recentVideos}</p>
+                        <p><i class="fas fa-eye"></i> Avg Views: ${item.avgViews}</p>
+                        <span class="status ${item.status}">${item.status.charAt(0).toUpperCase() + item.status.slice(1)}</span>
+                    `;
+                case 'brands':
+                    return `
+                        <h3>${item.name}</h3>
+                        <p><i class="fas fa-industry"></i> Industry: ${item.industry}</p>
+                        <p><i class="fas fa-handshake"></i> Collaborations: ${item.collaborations}</p>
+                        <p><i class="fas fa-wallet"></i> Budget: ${item.budget}</p>
+                        <p><i class="fas fa-star"></i> Satisfaction: ${item.satisfaction}</p>
+                        <span class="status ${item.status}">${item.status.charAt(0).toUpperCase() + item.status.slice(1)}</span>
+                    `;
+                case 'collaborations':
+                    return `
+                        <h3>${item.creator} × ${item.brand}</h3>
+                        <p><i class="fas fa-rupee-sign"></i> Value: ${item.value}</p>
+                        <p><i class="fas fa-clock"></i> End Date: ${item.endDate}</p>
+                        <p><i class="fas fa-tasks"></i> Progress: ${item.progress}</p>
+                        <span class="status ${item.status}">${item.status.charAt(0).toUpperCase() + item.status.slice(1)}</span>
+                    `;
+                case 'tickets':
+                    return `
+                        <h3>${item.title}</h3>
+                        <p><i class="fas fa-user"></i> Creator: ${item.creator}</p>
+                        <p><i class="fas fa-exclamation-circle"></i> Priority: ${item.priority}</p>
+                        <p><i class="fas fa-calendar-alt"></i> Date: ${item.date}</p>
+                        <span class="status ${item.status}">${item.status.charAt(0).toUpperCase() + item.status.slice(1)}</span>
+                    `;
+                default:
+                    return '';
+            }
+        }
+
+        function generateOverviewContent() {
+            return `
+                <div class="card">
+                    <h3><i class="fas fa-bell"></i> Recent Activity</h3>
+                    <ul>
+                        <li>New collaboration request from Flipkart</li>
+                        <li>Creator milestone achieved: BB Ki Vines</li>
+                        <li>Monthly revenue target reached</li>
+                        <li>10 new pending creator applications</li>
+                        <li>Annual brand summit scheduled</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-tasks"></i> Upcoming Tasks</h3>
+                    <ul>
+                        <li>Review pending collaborations (5)</li>
+                        <li>Prepare annual report</li>
+                        <li>Update platform policies</li>
+                        <li>Process payment disbursements</li>
+                        <li>Analyze user feedback</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-chart-pie"></i> Quick Stats</h3>
+                    <ul>
+                        <li>Platform Growth: +12% this month</li>
+                        <li>Creator Satisfaction: 4.6/5</li>
+                        <li>Brand Retention: 90%</li>
+                        <li>Average Deal Size: ₹50 Thousands</li>
+                    </ul>
+                </div>
+            `;
+        }
+
+        function generateAnalyticsView() {
+            return `
+                <div class="card">
+                    <h3><i class="fas fa-chart-line"></i> Monthly Revenue Trend</h3>
+                    <p>Chart data is not available in this demo.</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-chart-pie"></i> Category Distribution</h3>
+                    <p>Chart data is not available in this demo.</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-ticket-alt"></i> Ticket Resolution Stats</h3>
+                    <p><i class="fas fa-ticket-alt"></i> Total Tickets: ${dashboardData.analytics.ticketStats.totalTickets}</p>
+                    <p><i class="fas fa-folder-open"></i> Open Tickets: ${dashboardData.analytics.ticketStats.openTickets}</p>
+                    <p><i class="fas fa-check-circle"></i> Resolved Tickets: ${dashboardData.analytics.ticketStats.resolvedTickets}</p>
+                    <p><i class="fas fa-clock"></i> Avg Resolution Time: ${dashboardData.analytics.ticketStats.averageResolutionTime}</p>
+                </div>
+            `;
+        }
+
+        function generateDetailedView(section, id) {
+            const item = dashboardData[section].find(i => i.id === id);
+            if (!item) return 'Data not found';
+
+            let content = `
+                <div class="detailed-view">
+                    ${generateCardContent(item, section)}
+                    <div class="additional-info">
+                        <h4>Additional Information</h4>
+                        <p>Created: ${new Date().toLocaleDateString()}</p>
+                        <p>Last Updated: ${new Date().toLocaleDateString()}</p>
+                    </div>
+            `;
+
+            if (section === 'collaborations' && item.status === 'completed') {
+                content += generateRatingSection(item);
+            } else if (section === 'tickets') {
+                content += generateTicketActions(item);
+            }
+
+            content += '</div>';
+            return content;
+        }
+
+        function generateRatingSection(collaboration) {
+            if (collaboration.ratings) {
+                // Display the submitted ratings
+                const brandRatings = collaboration.ratings.brand;
+                const creatorRatings = collaboration.ratings.creator;
+
+                return `
+                    <div class="ratings-display">
+                        <h4><i class="fas fa-star"></i> Ratings</h4>
+                        <h5>Brand's Ratings</h5>
+                        <ul>
+                            <li><i class="fas fa-thumbs-up"></i> Cooperation: ${brandRatings.cooperation}/5</li>
+                            <li><i class="fas fa-chart-line"></i> Performance: ${brandRatings.performance}/5</li>
+                            <li><i class="fas fa-clock"></i> Execution Time: ${brandRatings.executionTime}/5</li>
+                            <li><i class="fas fa-money-bill-wave"></i> Value for Money: ${brandRatings.valueForMoney}/5</li>
+                        </ul>
+                        <h5>Creator's Ratings</h5>
+                        <ul>
+                            <li><i class="fas fa-handshake"></i> Cooperation: ${creatorRatings.cooperation}/5</li>
+                            <li><i class="fas fa-rupee-sign"></i> Timely Payment: ${creatorRatings.timelyPayment}/5</li>
+                        </ul>
+                    </div>
+                `;
+            } else {
+                // If no ratings are available
+                return `
+                    <div class="ratings-display">
+                        <h4><i class="fas fa-star-half-alt"></i> Ratings</h4>
+                        <p>No ratings available for this collaboration yet.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function generateTicketActions(ticket) {
+            if (ticket.status === 'open') {
+                return `
+                    <button onclick="resolveTicket(${ticket.id})" class="btn-primary">Resolve Ticket</button>
+                `;
+            } else {
+                return '<p>This ticket has been resolved.</p>';
+            }
+        }
+
+        function generateProfileContent() {
+            return `
+                <div class="profile-content" style="text-align:center;">
+                    <div class="avatar" style="width:80px; height:80px; margin:0 auto 1rem;">RS</div>
+                    <h3>Rahul Singh</h3>
+                    <p>Admin Manager</p>
+                    <p>rahul.singh@example.com</p>
+                    <p>Last Login: ${new Date().toLocaleString()}</p>
+                </div>
+            `;
+        }
+
+        // Modal Functions
+        function openModal(title, content) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalBody').innerHTML = content;
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize the dashboard
+            loadContent('overview');
+            updateCurrentTime();
+            setInterval(updateCurrentTime, 1000);
+
+            // Add navigation listeners
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.querySelector('.nav-link.active').classList.remove('active');
+                    link.classList.add('active');
+                    const section = link.dataset.section;
+                    showLoading();
+                    setTimeout(() => {
+                        loadContent(section);
+                        hideLoading();
+                    }, 500);
+                });
+            });
+
+            // Add search functionality
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                const searchTerm = e.target.value;
+                const currentSection = document.querySelector('.nav-link.active').dataset.section;
+                const statusFilter = document.getElementById('statusFilter').value;
+                loadContent(currentSection, searchTerm, statusFilter);
+            });
+
+            // Add filter functionality
+            document.getElementById('statusFilter').addEventListener('change', (e) => {
+                const statusFilter = e.target.value;
+                const searchTerm = document.getElementById('searchInput').value;
+                const currentSection = document.querySelector('.nav-link.active').dataset.section;
+                loadContent(currentSection, searchTerm, statusFilter);
+            });
+
+            // Close modal when clicking outside
+            window.addEventListener('click', (e) => {
+                const modal = document.getElementById('modal');
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+
+            // Initialize with loading complete
+            hideLoading();
+        });
+
+        // Function to resolve a ticket
+        function resolveTicket(ticketId) {
+            const ticket = dashboardData.tickets.find(t => t.id === ticketId);
+            if (ticket) {
+                ticket.status = 'resolved';
+                closeModal();
+                loadContent('tickets');
+                alert('Ticket has been resolved.');
+            }
+        }
+    </script>
+</body>
+</html>

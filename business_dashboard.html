@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Business Collaboration Dashboard</title>
+    <!-- Include Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500,600,700&display=swap" rel="stylesheet">
+    <!-- Include Font Awesome and Animate.css -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --youtube-red: #FF0000;
+            --youtube-dark: #282828;
+            --youtube-black: #0F0F0F;
+            --youtube-grey: #717171;
+            --youtube-light-grey: #F1F1F1;
+            --youtube-white: #FFFFFF;
+            --card-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --hover-shadow: 0 8px 15px rgba(0,0,0,0.2);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            transition: var(--transition);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: var(--youtube-black);
+            color: var(--youtube-white);
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background: var(--youtube-dark);
+            color: var(--youtube-white);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        header h1 i {
+            color: var(--youtube-red);
+            font-size: 2.2rem;
+            animation: pulse 2s infinite;
+        }
+
+        .profile-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .profile-menu img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid var(--youtube-red);
+        }
+
+        .profile-menu span {
+            font-weight: 500;
+            color: var(--youtube-white);
+        }
+
+        /* Tabs */
+        .tab-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 0.5rem;
+            justify-content: center;
+        }
+
+        .tab {
+            padding: 0.8rem 1.2rem;
+            border: none;
+            background: transparent;
+            color: var(--youtube-white);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+            transition: var(--transition);
+        }
+
+        .tab:hover {
+            color: var(--youtube-red);
+        }
+
+        .tab.active {
+            color: var(--youtube-red);
+            border-bottom: 3px solid var(--youtube-red);
+        }
+
+        /* Search Bar */
+        .search-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .search-bar input,
+        .search-bar select {
+            padding: 0.8rem 1.2rem;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 25px;
+            flex: 1;
+            min-width: 200px;
+            font-size: 1rem;
+            background: var(--youtube-black);
+            color: var(--youtube-white);
+        }
+
+        .search-bar input:focus,
+        .search-bar select:focus {
+            outline: none;
+            border-color: var(--youtube-red);
+            box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.2);
+        }
+
+        .search-bar .btn {
+            background-color: var(--youtube-red);
+            color: var(--youtube-white);
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .search-bar .btn:hover {
+            background-color: #E60000;
+            transform: translateY(-2px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        /* YouTuber Grid */
+        .youtuber-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .youtuber-card {
+            background: var(--youtube-dark);
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: var(--card-shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .youtuber-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .youtuber-card h3 {
+            margin-bottom: 0.5rem;
+            color: var(--youtube-white);
+        }
+
+        .stats {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+            color: var(--youtube-grey);
+            flex-wrap: wrap;
+        }
+
+        .stats .stat {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .collab-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .collab-tag {
+            background: rgba(255,255,255,0.1);
+            color: var(--youtube-white);
+            padding: 0.3rem 0.8rem;
+            border-radius: 25px;
+            font-size: 0.8rem;
+        }
+
+        .collab-button {
+            background: var(--youtube-red);
+            color: var(--youtube-white);
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            width: 100%;
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .collab-button:hover {
+            background-color: #E60000;
+            transform: translateY(-2px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Collaboration Form */
+        .collab-form {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: var(--youtube-dark);
+            border-radius: 15px;
+            box-shadow: var(--card-shadow);
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .collab-form h2 {
+            margin-bottom: 1.5rem;
+            color: var(--youtube-white);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .collab-form h2 i {
+            color: var(--youtube-red);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--youtube-white);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem 1.2rem;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 25px;
+            font-size: 1rem;
+            background: var(--youtube-black);
+            color: var(--youtube-white);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--youtube-red);
+            box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.2);
+        }
+
+        .collab-form button {
+            background: var(--youtube-red);
+            color: var(--youtube-white);
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            width: 100%;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .collab-form button:hover {
+            background-color: #E60000;
+            transform: translateY(-2px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        /* Analytics Section */
+        .analytics-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: var(--youtube-dark);
+            border-radius: 15px;
+            box-shadow: var(--card-shadow);
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .analytics-container h2 {
+            margin-bottom: 1.5rem;
+            color: var(--youtube-white);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .analytics-container h2 i {
+            color: var(--youtube-red);
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .analytics-card {
+            background: rgba(255,255,255,0.1);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+        }
+
+        .analytics-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .analytics-card h3 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--youtube-red);
+        }
+
+        .analytics-card p {
+            font-size: 1rem;
+            color: var(--youtube-white);
+        }
+
+        /* Profile Section */
+        .profile-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: var(--youtube-dark);
+            border-radius: 15px;
+            box-shadow: var(--card-shadow);
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-header img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px solid var(--youtube-red);
+        }
+
+        .profile-header h2 {
+            font-size: 1.8rem;
+            color: var(--youtube-white);
+        }
+
+        .profile-container h3 {
+            color: var(--youtube-white);
+            margin-top: 1.5rem;
+        }
+
+        .profile-container p {
+            color: var(--youtube-grey);
+            margin-top: 0.5rem;
+        }
+
+        .past-collabs {
+            margin-top: 2rem;
+        }
+
+        .collab-list {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 1rem;
+        }
+
+        .collab-list li {
+            background: rgba(255,255,255,0.1);
+            padding: 0.8rem 1.2rem;
+            border-radius: 25px;
+            margin-bottom: 0.5rem;
+            color: var(--youtube-white);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .collab-list li i {
+            color: var(--youtube-red);
+        }
+
+        /* Support Section */
+        .support-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: var(--youtube-dark);
+            border-radius: 15px;
+            box-shadow: var(--card-shadow);
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .search-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-bar input,
+            .search-bar select,
+            .search-bar .btn {
+                width: 100%;
+            }
+
+            .tabs {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>
+            <i class="fab fa-youtube"></i>
+            Business Collaboration Hub
+        </h1>
+        <div class="profile-menu">
+            <span>Welcome, Tech Hub</span>
+            <img src="11.png" alt="Profile Picture">
+        </div>
+    </header>
+
+    <div class="tab-container">
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('search')">
+                <i class="fas fa-search"></i> Find Creators
+            </button>
+            <button class="tab" onclick="switchTab('collab')">
+                <i class="fas fa-handshake"></i> Collaboration Hub
+            </button>
+            <button class="tab" onclick="switchTab('profile')">
+                <i class="fas fa-user"></i> My Profile
+            </button>
+            <button class="tab" onclick="switchTab('analytics')">
+                <i class="fas fa-chart-bar"></i> Analytics
+            </button>
+            <button class="tab" onclick="switchTab('support')">
+                <i class="fas fa-life-ring"></i> Support
+            </button>
+        </div>
+
+        <!-- Search Tab Content -->
+        <div id="search" class="tab-content active">
+            <div class="search-bar">
+                <input type="text" id="domain" placeholder="Content Category">
+                <input type="text" id="location" placeholder="Location in India">
+                <select id="collab-type">
+                    <option value="">Collaboration Type</option>
+                    <option value="brandDeals">Brand Deals</option>
+                    <option value="sponsorship">Sponsorship</option>
+                    <option value="productReview">Product Review</option>
+                    <option value="events">Events</option>
+                </select>
+                <button class="btn" onclick="searchCreators()">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </div>
+            <div id="youtuber-list" class="youtuber-grid"></div>
+        </div>
+
+        <!-- Collaboration Hub Tab Content -->
+        <div id="collab" class="tab-content"></div>
+
+        <!-- Profile Tab Content -->
+        <div id="profile" class="tab-content">
+            <div class="profile-container">
+                <div class="profile-header">
+                    <img src="11.png" alt="Profile Picture">
+                    <h2>Tech Hub</h2>
+                </div>
+                <div>
+                    <h3><i class="fas fa-envelope"></i> Contact Information</h3>
+                    <p>Email: business.owner@example.com</p>
+                    <p>Phone: +91 9876543210</p>
+                </div>
+                <div class="past-collabs">
+                    <h3><i class="fas fa-history"></i> Past Collaborations</h3>
+                    <ul class="collab-list" id="past-collabs-list">
+                        <!-- Past collaborations will be inserted here -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics Tab Content -->
+        <div id="analytics" class="tab-content">
+            <div class="analytics-container">
+                <h2><i class="fas fa-chart-bar"></i> Analytics Dashboard</h2>
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <h3 id="total-collabs">0</h3>
+                        <p>Total Collaborations</p>
+                    </div>
+                    <div class="analytics-card">
+                        <h3 id="pending-collabs">0</h3>
+                        <p>Pending Collaborations</p>
+                    </div>
+                    <div class="analytics-card">
+                        <h3 id="completed-collabs">0</h3>
+                        <p>Completed Collaborations</p>
+                    </div>
+                    <div class="analytics-card">
+                        <h3 id="total-spent">₹0</h3>
+                        <p>Total Amount Spent</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Support Tab Content -->
+        <div id="support" class="tab-content">
+            <div class="support-container">
+                <h2><i class="fas fa-life-ring"></i> Support</h2>
+                <form onsubmit="submitSupportRequest(event)">
+                    <div class="form-group">
+                        <label><i class="fas fa-heading"></i> Subject</label>
+                        <input type="text" required placeholder="Subject">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-comment-dots"></i> Message</label>
+                        <textarea required placeholder="Describe your issue or query"></textarea>
+                    </div>
+                    <button type="submit">
+                        <i class="fas fa-paper-plane"></i> Submit Ticket
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Code -->
+    <script>
+     const creators = [
+    // Tier 1: <10k subs, Base Price: ₹5,000
+    { name: 'Tech Rookie', tier: 'Tier 1', subscribers: '9K', domain: 'Technology', location: 'Pune', collabTypes: ['Product Reviews', 'Brand Awareness'], expertise: ['Gadget Reviews'], previousCollabs: ['Gizmo World'], availability: 'Available', basePrice: '₹5,000' },
+    { name: 'Foodie Finds', tier: 'Tier 1', subscribers: '8K', domain: 'Food', location: 'Delhi', collabTypes: ['Recipe Showcases', 'Product Demos'], expertise: ['Indian Cuisine'], previousCollabs: ['Spice Corner'], availability: 'Open to Collaborations', basePrice: '₹5,000' },
+    { name: 'Motivation Hub', tier: 'Tier 1', subscribers: '7K', domain: 'Motivation', location: 'Bangalore', collabTypes: ['Brand Deals'], expertise: ['Motivational Talks'], previousCollabs: ['Grow Together'], availability: 'Available', basePrice: '₹5,000' },
+    { name: 'TechWithRaj', tier: 'Tier 1', subscribers: '6K', domain: 'Tech', location: 'Pune', collabTypes: ['Brand Awareness', 'Product Demos'], expertise: ['Product Demos'], previousCollabs: ['Sudhamache Pohe'], availability: 'Open', basePrice: '₹5,000' },
+    { name: 'Laugh Station', tier: 'Tier 1', subscribers: '5K', domain: 'Comedy', location: 'Mumbai', collabTypes: ['Brand Deals', 'Comedy Skits'], expertise: ['Stand-up Comedy'], previousCollabs: ['Giggle Venue'], availability: 'Open', basePrice: '₹5,000' },
+
+    // Tier 2: 10,001 to 100,000 subs, Base Price: ₹20,000
+    { name: 'Tech Buddy', tier: 'Tier 2', subscribers: '85K', domain: 'Technology', location: 'Hyderabad', collabTypes: ['Product Reviews', 'Tech Events'], expertise: ['Gadget Unboxing'], previousCollabs: ['Device Arena'], availability: 'Available', basePrice: '₹20,000' },
+    { name: 'Health Hive', tier: 'Tier 2', subscribers: '65K', domain: 'Health', location: 'Mumbai', collabTypes: ['Wellness Partnerships', 'Brand Awareness'], expertise: ['Healthy Lifestyle'], previousCollabs: ['Fit World'], availability: 'Open to Collaborations', basePrice: '₹20,000' },
+    { name: 'Cookery Junction', tier: 'Tier 2', subscribers: '50K', domain: 'Food', location: 'Jaipur', collabTypes: ['Recipe Showcases', 'Product Reviews'], expertise: ['Traditional Cuisine'], previousCollabs: ['Spice House'], availability: 'Available', basePrice: '₹20,000' },
+    { name: 'Gaming Guru', tier: 'Tier 2', subscribers: '45K', domain: 'Gaming', location: 'Bangalore', collabTypes: ['Gaming Sponsorships', 'Product Promotions'], expertise: ['Gaming Commentary'], previousCollabs: ['Game Zone'], availability: 'Limited Availability', basePrice: '₹20,000' },
+    { name: 'Fashion Frenzy', tier: 'Tier 2', subscribers: '30K', domain: 'Fashion', location: 'Delhi', collabTypes: ['Brand Deals', 'Fashion Showcases'], expertise: ['Style Tips'], previousCollabs: ['Style Spot'], availability: 'Open', basePrice: '₹20,000' },
+
+    // Tier 3: 100,001 and above subs, Base Price: ₹1,00,000
+    { name: 'Technical Guruji', tier: 'Tier 3', subscribers: '20M', domain: 'Technology', location: 'Dubai/Mumbai', collabTypes: ['Product Reviews', 'Sponsorships', 'Tech Events'], expertise: ['Gadget Reviews', 'Tech News', 'Consumer Electronics'], previousCollabs: ['Digital Fix', 'Gizmo Care', 'Device Hub'], availability: 'Open to Collaborations', basePrice: '₹1,00,000' },
+    { name: 'BB Ki Vines', tier: 'Tier 3', subscribers: '25M', domain: 'Comedy', location: 'Delhi', collabTypes: ['Brand Deals', 'Live Shows'], expertise: ['Sketch Comedy', 'Music'], previousCollabs: ['Jokes & Co.', 'Punchline Café'], availability: 'Open to Collaborations', basePrice: '₹1,00,000' },
+    { name: 'Amit Bhadana', tier: 'Tier 3', subscribers: '23M', domain: 'Comedy', location: 'Delhi', collabTypes: ['Brand Deals', 'Product Promotions'], expertise: ['Sketch Comedy'], previousCollabs: ['Laugh House', 'Giggle Venue'], availability: 'Available', basePrice: '₹1,00,000' },
+    { name: 'Sandeep Maheshwari', tier: 'Tier 3', subscribers: '21M', domain: 'Motivation', location: 'Delhi', collabTypes: ['Brand Deals', 'Talk Shows'], expertise: ['Motivational Talks'], previousCollabs: ['Insight Academy', 'Grow Together'], availability: 'Available', basePrice: '₹1,00,000' },
+    { name: 'Cooking Shooking', tier: 'Tier 3', subscribers: '7M', domain: 'Food', location: 'Noida', collabTypes: ['Product Reviews', 'Cooking Shows'], expertise: ['Indian Recipes'], previousCollabs: ['Masala House', 'Spice Villa'], availability: 'Available', basePrice: '₹1,00,000' }
+];
+
+
+
+        // Simulated past collaborations
+        const pastCollaborations = [
+            {creator: 'Technical Guruji', type: 'Product Review', amount: 500000,amount_print:"500000", status: 'Completed'},
+            {creator: 'The Tech Reviewer', type: 'Sponsorship', amount: 10000, status: 'Pending'}
+        ];
+
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.getElementById(tabId).classList.add('active');
+            document.querySelector(`button[onclick="switchTab('${tabId}')"]`).classList.add('active');
+
+            if (tabId === 'analytics') {
+                loadAnalytics();
+            }
+
+            if (tabId === 'profile') {
+                loadProfile();
+            }
+        }
+
+        function searchCreators() {
+            const domainInput = document.getElementById('domain').value.toLowerCase();
+            const locationInput = document.getElementById('location').value.toLowerCase();
+            const collabTypeInput = document.getElementById('collab-type').value.toLowerCase();
+
+            const filteredCreators = creators.filter(creator => {
+                const domainMatch = creator.domain.toLowerCase().includes(domainInput);
+                const locationMatch = creator.location.toLowerCase().includes(locationInput);
+                const collabTypeMatch = collabTypeInput ? creator.collabTypes.some(type => type.toLowerCase().includes(collabTypeInput)) : true;
+
+                return domainMatch && locationMatch && collabTypeMatch;
+            });
+
+            displayCreators(filteredCreators);
+        }
+
+        function displayCreators(filteredCreators) {
+    const container = document.getElementById('youtuber-list');
+    container.innerHTML = '';
+
+    if (filteredCreators.length === 0) {
+        container.innerHTML = '<p>No creators found matching your criteria.</p>';
+        return;
+    }
+
+    filteredCreators.forEach(creator => {
+        const card = document.createElement('div');
+        card.className = 'youtuber-card';
+        card.innerHTML = `
+            <h3>${creator.name}</h3>
+            <p><strong>Tier:</strong> ${creator.tier}</p>
+            <p><strong>Base Price:</strong> ${creator.basePrice}</p>
+            <div class="stats">
+                <span class="stat"><i class="fas fa-tag"></i> ${creator.domain}</span>
+                <span class="stat"><i class="fas fa-map-marker-alt"></i> ${creator.location}</span>
+                <span class="stat"><i class="fas fa-user-friends"></i> ${creator.subscribers} Subscribers</span>
+            </div>
+            <div>
+                <h4>Collaboration Types:</h4>
+                <div class="collab-options">
+                    ${creator.collabTypes.map(type => 
+                        `<span class="collab-tag">${type}</span>`
+                    ).join('')}
+                </div>
+            </div>
+            <div>
+                <h4>Previous Collaborations:</h4>
+                <div class="collab-options">
+                    ${creator.previousCollabs.map(collab => 
+                        `<span class="collab-tag">${collab}</span>`
+                    ).join('')}
+                </div>
+            </div>
+            <button class="collab-button" onclick="initiateCollaboration('${creator.name}')">
+                <i class="fas fa-handshake"></i> Initiate Collaboration
+            </button>
+        `;
+        container.appendChild(card);
+    });
+}
+
+
+        function initiateCollaboration(creatorName) {
+            const creator = creators.find(c => c.name === creatorName);
+            if (creator) {
+                showCollabForm(creator);
+            }
+        }
+
+        function showCollabForm(creator) {
+            const formHTML = `
+                <div class="collab-form">
+                    <h2><i class="fas fa-handshake"></i> Collaborate with ${creator.name}</h2>
+                    <form onsubmit="submitCollabRequest(event, '${creator.name}')">
+                        <div class="form-group">
+                            <label><i class="fas fa-briefcase"></i> Collaboration Type</label>
+                            <select required id="collab-type-select">
+                                ${creator.collabTypes.map(type => 
+                                    `<option value="${type}">${type}</option>`
+                                ).join('')}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-file-alt"></i> Project Details</label>
+                            <textarea required id="project-details" placeholder="Describe your collaboration proposal"></textarea>
+                        </div>
+                      <div class="form-group">
+    <label><i class="fas fa-rupee-sign"></i> Budget Range</label>
+    <div class="budget-range-inputs">
+        <input type="number" id="min-budget" placeholder="Min Budget (e.g., 5)" required>
+        <span> - </span>
+        <input type="number" id="max-budget" placeholder="Max Budget (e.g., 10)" required>
+        <span>L</span>
+    </div>
+</div>
+
+                        <button type="submit">
+                            <i class="fas fa-paper-plane"></i> Submit Proposal
+                        </button>
+                    </form>
+                </div>
+            `;
+            
+            document.getElementById('collab').innerHTML = formHTML;
+            switchTab('collab');
+        }
+
+        function submitCollabRequest(event, creatorName) {
+    event.preventDefault();
+    const collabType = document.getElementById('collab-type-select').value;
+    const projectDetails = document.getElementById('project-details').value;
+    const minBudget = document.getElementById('min-budget').value;
+    const maxBudget = document.getElementById('max-budget').value;
+
+    // Combine min and max budgets as a range
+    const budgetRange = `${minBudget}L - ${maxBudget}L`;
+
+    // Add the new collaboration request to pastCollaborations array
+    pastCollaborations.push({
+        creator: creatorName,
+        type: collabType,
+        amount: budgetRange,
+        status: 'Pending'
+    });
+
+    alert(`Collaboration request submitted for ${creatorName}!`);
+
+    // Reset the collaboration form and navigate back to the search tab
+    document.getElementById('collab').innerHTML = '';
+    switchTab('search');
+
+    // Reload the profile to display the newly added pending collaboration
+    loadProfile();
+}
+
+        function loadAnalytics() {
+            const totalCollabs = pastCollaborations.length;
+            const pendingCollabs = pastCollaborations.filter(collab => collab.status === 'Pending').length;
+            const completedCollabs = pastCollaborations.filter(collab => collab.status === 'Completed').length;
+            const totalSpent = pastCollaborations.reduce((sum, collab) => {
+                if (collab.status === 'Completed') {
+                    let amount = 0;
+                    if (typeof collab.amount === 'number') {
+                        amount = collab.amount;
+                    } else if (collab.amount.includes('10L+')) {
+                        amount = 1000000; // Assume 10L+
+                    } else if (collab.amount.includes('5L-10L')) {
+                        amount = 750000; // Average
+                    } else if (collab.amount.includes('<5L')) {
+                        amount = 250000; // Average
+                    }
+                    return sum + amount;
+                }
+                return sum;
+            }, 0);
+
+            document.getElementById('total-collabs').innerText = totalCollabs;
+            document.getElementById('pending-collabs').innerText = pendingCollabs;
+            document.getElementById('completed-collabs').innerText = completedCollabs;
+            document.getElementById('total-spent').innerText = `₹${(totalSpent/100000).toFixed(2)} Lakhs`;
+        }
+
+        function loadProfile() {
+            const pastCollabsList = document.getElementById('past-collabs-list');
+            pastCollabsList.innerHTML = '';
+
+            if (pastCollaborations.length === 0) {
+                pastCollabsList.innerHTML = '<p>No past collaborations yet.</p>';
+                return;
+            }
+
+            pastCollaborations.forEach(collab => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <i class="fas fa-check-circle"></i>
+                    Collaborated with ${collab.creator} for ${collab.type}. Status: ${collab.status}
+                `;
+                pastCollabsList.appendChild(listItem);
+            });
+        }
+
+        function submitSupportRequest(event) {
+            event.preventDefault();
+            alert('Support request submitted!');
+            event.target.reset();
+        }
+
+        // Initialize the page
+        window.onload = searchCreators;
+    </script>
+</body>
+</html>

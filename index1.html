@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>YouTube Collaboration Portal</title>
+    <!-- Include Font Awesome and CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Updated styles with animations and color theme */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --youtube-red: #FF0000;
+            --youtube-dark: #282828;
+            --youtube-black: #0F0F0F;
+            --youtube-grey: #717171;
+            --youtube-light-grey: #F1F1F1;
+            --youtube-white: #FFFFFF;
+            --card-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --hover-shadow: 0 8px 15px rgba(0,0,0,0.2);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: var(--youtube-black);
+            color: var(--youtube-white);
+            min-height: 100vh;
+            transition: opacity 0.5s ease;
+        }
+
+        /* Header */
+        .header {
+            background: var(--youtube-dark);
+            color: var(--youtube-white);
+            padding: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: var(--youtube-white);
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .header-title i {
+            color: var(--youtube-red);
+            font-size: 2.2rem;
+            animation: pulse 2s infinite;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-link {
+            color: var(--youtube-white);
+            text-decoration: none;
+            padding: 0.8rem 1.2rem;
+            border-radius: 25px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: fadeInDown 1s ease-out;
+            background: var(--youtube-dark);
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .welcome-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--youtube-red) 0%, #E60000 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .welcome-section p {
+            color: var(--youtube-grey);
+            font-size: 1.1rem;
+        }
+
+        /* Portal Cards */
+        .portal-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .portal-card {
+            background: var(--youtube-dark);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+            box-shadow: var(--card-shadow);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .portal-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--youtube-red);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 0;
+        }
+
+        .portal-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .portal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .portal-card img {
+            width: 120px;
+            height: 120px;
+            border-radius: 60px;
+            object-fit: cover;
+            margin-bottom: 1rem;
+            border: 4px solid var(--youtube-light-grey);
+            transition: var(--transition);
+        }
+
+        .portal-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .portal-card h3 {
+            color: var(--youtube-white);
+            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        .portal-card p {
+            color: var(--youtube-grey);
+            font-size: 1rem;
+        }
+
+        /* Authentication Sections */
+        .auth-section {
+            background: var(--youtube-dark);
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: var(--card-shadow);
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .auth-section h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--youtube-white);
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            gap: 1rem;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 25px;
+            transition: var(--transition);
+            background: var(--youtube-grey);
+            color: var(--youtube-white);
+        }
+
+        .auth-tab.active {
+            background: var(--youtube-red);
+            color: var(--youtube-white);
+        }
+
+        .auth-tab:hover {
+            background: var(--youtube-red);
+            color: var(--youtube-white);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--youtube-white);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 25px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: var(--youtube-black);
+            color: var(--youtube-white);
+            padding-left: 2.5rem;
+        }
+
+        .form-group i {
+            position: absolute;
+            left: 1rem;
+            top: 2.7rem;
+            color: var(--youtube-grey);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--youtube-red);
+            box-shadow: 0 0 0 2px rgba(255,0,0,0.2);
+        }
+
+        .btn {
+            background: var(--youtube-red);
+            color: var(--youtube-white);
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--hover-shadow);
+            background: #E60000;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--youtube-dark);
+            color: var(--youtube-white);
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: var(--youtube-white);
+        }
+
+        .footer-section p {
+            color: var(--youtube-grey);
+            line-height: 1.6;
+        }
+
+        /* Social Icons */
+        .social-icons {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .social-icons i {
+            font-size: 1.5rem;
+            color: var(--youtube-white);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .social-icons i:hover {
+            transform: scale(1.2);
+            color: var(--youtube-red);
+        }
+
+        /* Messages */
+        .message {
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 8px;
+            animation: slideIn 0.3s ease-out;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .message.error {
+            background: rgba(255, 0, 0, 0.1);
+            color: var(--youtube-red);
+        }
+
+        .message.success {
+            background: rgba(0, 200, 83, 0.1);
+            color: #00C853;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Password visibility toggle */
+        .toggle-password {
+            position: absolute;
+            right: 1rem;
+            top: 2.7rem;
+            cursor: pointer;
+            color: var(--youtube-grey);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .portal-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="header-title">
+                <i class="fab fa-youtube"></i>
+                <h1>YouTube Collaboration Portal</h1>
+            </div>
+            <nav class="header-nav">
+                <a href="#" class="nav-link">Home</a>
+                <a href="#" class="nav-link">About</a>
+                <a href="#" class="nav-link">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <h2>Welcome to the Collaboration Portal</h2>
+            <p>Connect, Create, and Collaborate with India's finest YouTube creators and businesses</p>
+        </div>
+
+        <!-- Portal Cards -->
+        <div class="portal-cards">
+            <div class="portal-card" onclick="selectPortal('Business')">
+                <img src="Businessport.png" alt="Business Portal">
+                <h3>Business Portal</h3>
+                <p>Connect with creators and manage your campaigns</p>
+            </div>
+            <div class="portal-card" onclick="selectPortal('YouTuber')">
+                <img src="Ytportal.png" alt="YouTuber Portal">
+                <h3>YouTuber Portal</h3>
+                <p>Find sponsorships and manage collaborations</p>
+            </div>
+            <div class="portal-card" onclick="selectPortal('Admin')">
+                <img src="adminport.png" alt="Admin Portal">
+                <h3>Admin Portal</h3>
+                <p>Manage and oversee platform activities</p>
+            </div>
+        </div>
+
+        <!-- Authentication Sections -->
+
+        <!-- Business Authentication Section -->
+        <div class="auth-section" id="businessAuth">
+            <h2>Business Portal</h2>
+            <div class="auth-tabs">
+                <div class="auth-tab active" onclick="switchTab('Business', 'login')">Login</div>
+                <div class="auth-tab" onclick="switchTab('Business', 'signup')">Signup</div>
+            </div>
+            <!-- Business Login Form -->
+            <form id="businessLoginForm">
+                <div class="form-group">
+                    <label for="businessUsername">Username:</label>
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="businessUsername" class="form-control" placeholder="Enter your username">
+                </div>
+                <div class="form-group">
+                    <label for="businessPassword">Password:</label>
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="businessPassword" class="form-control" placeholder="Enter your password">
+                </div>
+                <div class="form-group">
+                    <button type="button" id="businessLoginButton" class="btn">
+                        <i class="fas fa-sign-in-alt"></i>
+                        <span>Login</span>
+                    </button>
+                </div>
+            </form>
+            <!-- Business Signup Form -->
+            <form id="businessSignupForm" style="display:none;">
+                <div class="form-group">
+                    <label for="businessName">Business Name:</label>
+                    <i class="fas fa-building"></i>
+                    <input type="text" id="businessName" class="form-control" placeholder="Enter your business name">
+                </div>
+                <div class="form-group">
+                    <label for="businessSignupUsername">Username:</label>
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="businessSignupUsername" class="form-control" placeholder="Choose a username">
+                </div>
+                <div class="form-group">
+                    <label for="businessSignupPassword">Password:</label>
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="businessSignupPassword" class="form-control" placeholder="Choose a password">
+                </div>
+                <div class="form-group">
+                    <label for="businessConfirmPassword">Confirm Password:</label>
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="businessConfirmPassword" class="form-control" placeholder="Confirm your password">
+                </div>
+                <div class="form-group">
+                    <label for="businessPAN">PAN Number:</label>
+                    <i class="fas fa-id-card"></i>
+                    <input type="text" id="businessPAN" class="form-control" placeholder="Enter your PAN number">
+                </div>
+                <div class="form-group">
+                    <button type="button" id="businessSignupButton" class="btn">
+                        <i class="fas fa-user-plus"></i>
+                        <span>Signup</span>
+                    </button>
+                </div>
+            </form>
+            <div id="businessMessage"></div>
+        </div>
+
+        <!-- YouTuber Authentication Section -->
+        <div class="auth-section" id="youtuberAuth">
+            <h2>YouTuber Portal</h2>
+            <div class="auth-tabs">
+                <div class="auth-tab active" onclick="switchTab('YouTuber', 'login')">Login</div>
+                <div class="auth-tab" onclick="switchTab('YouTuber', 'signup')">Signup</div>
+            </div>
+            <!-- YouTuber Login Form -->
+            <form id="youtuberLoginForm">
+                <div class="form-group">
+                    <label for="youtuberUsername">Username:</label>
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="youtuberUsername" class="form-control" placeholder="Enter your username">
+                </div>
+                <div class="form-group">
+                    <label for="youtuberPassword">Password:</label>
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="youtuberPassword" class="form-control" placeholder="Enter your password">
+                </div>
+                <div class="form-group">
+                    <button type="button" id="youtuberLoginButton" class="btn">
+                        <i class="fas fa-sign-in-alt"></i>
+                        <span>Login</span>
+                    </button>
+                </div>
+            </form>
+            <!-- YouTuber Signup Form -->
+            <form id="youtuberSignupForm" style="display:none;">
+                <div class="form-group">
+                    <label for="youtuberName">Channel Name:</label>
+                    <i class="fas fa-video"></i>
+                    <input type="text" id="youtuberName" class="form-control" placeholder="Enter your channel name">
+                </div>
+                <div class="form-group">
+                    <label for="youtuberSignupUsername">Username:</label>
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="youtuberSignupUsername" class="form-control" placeholder="Choose a username">
+                </div>
+                <div class="form-group">
+                    <label for="youtuberSignupPassword">Password:</label>
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="youtuberSignupPassword" class="form-control" placeholder="Choose a password">
+                </div>
+                <div class="form-group">
+                    <label for="youtuberConfirmPassword">Confirm Password:</label>
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="youtuberConfirmPassword" class="form-control" placeholder="Confirm your password">
+                </div>
+                <div class="form-group">
+                    <button type="button" id="youtuberSignupButton" class="btn">
+                        <i class="fas fa-user-plus"></i>
+                        <span>Signup</span>
+                    </button>
+                </div>
+            </form>
+            <div id="youtuberMessage"></div>
+        </div>
+
+        <!-- Admin Authentication Section -->
+        <div class="auth-section" id="adminAuth">
+            <h2>Admin Portal</h2>
+            <!-- Admin Login Form -->
+            <form id="adminLoginForm">
+                <div class="form-group">
+                    <label for="adminUsername">Username:</label>
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="adminUsername" class="form-control" placeholder="Enter your username">
+                </div>
+                <div class="form-group">
+                    <label for="adminPassword">Password:</label>
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="adminPassword" class="form-control" placeholder="Enter your password">
+                </div>
+                <div class="form-group">
+                    <button type="button" id="adminLoginButton" class="btn">
+                        <i class="fas fa-sign-in-alt"></i>
+                        <span>Login</span>
+                    </button>
+                </div>
+            </form>
+            <div id="adminMessage"></div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Us</h3>
+                <p>We connect Indian YouTubers with businesses to create amazing content and meaningful partnerships.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <p>Terms of Service</p>
+                <p>Privacy Policy</p>
+                <p>Support</p>
+            </div>
+            <div class="footer-section">
+                <h3>Connect With Us</h3>
+                <div class="social-icons">
+                    <i class="fab fa-facebook"></i>
+                    <i class="fab fa-twitter"></i>
+                    <i class="fab fa-instagram"></i>
+                    <i class="fab fa-linkedin"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript code -->
+    <script>
+        // Initial credentials (for demonstration purposes)
+        const credentials = {
+            'Business': [
+                {businessName: 'Tech Hub', username: 'techUser', password: 'techPass123', panNumber: 'ABCDE1234F'}
+            ],
+            'YouTuber': [
+                {channelName: 'TechWithRaj', username: 'rajUser', password: 'rajPass123'}
+            ],
+            'Admin': {username: 'admin', password: 'admin123'}
+        };
+
+        function selectPortal(portal) {
+            // Hide all auth sections
+            document.getElementById('businessAuth').style.display = 'none';
+            document.getElementById('youtuberAuth').style.display = 'none';
+            document.getElementById('adminAuth').style.display = 'none';
+
+            // Show the selected auth section
+            if (portal === 'Business') {
+                document.getElementById('businessAuth').style.display = 'block';
+            } else if (portal === 'YouTuber') {
+                document.getElementById('youtuberAuth').style.display = 'block';
+            } else if (portal === 'Admin') {
+                document.getElementById('adminAuth').style.display = 'block';
+            }
+
+            // Scroll to auth section
+            document.getElementById(portal.toLowerCase() + 'Auth').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'center'
+            });
+        }
+
+        function switchTab(portal, tab) {
+            // Get the tabs and forms for the portal
+            const authTabs = document.querySelectorAll('#' + portal.toLowerCase() + 'Auth .auth-tab');
+            authTabs.forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Show/hide forms
+            const loginForm = document.getElementById(portal.toLowerCase() + 'LoginForm');
+            const signupForm = document.getElementById(portal.toLowerCase() + 'SignupForm');
+            if (tab === 'login') {
+                loginForm.style.display = '';
+                signupForm.style.display = 'none';
+            } else {
+                loginForm.style.display = 'none';
+                signupForm.style.display = '';
+            }
+
+            // Clear forms and messages
+            loginForm.reset();
+            signupForm.reset();
+            document.getElementById(portal.toLowerCase() + 'Message').innerHTML = '';
+        }
+
+        function validatePAN(pan) {
+            // Simple PAN number validation (Indian PAN format)
+            const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+            return panRegex.test(pan);
+        }
+
+        function handleBusinessLogin() {
+            const username = document.getElementById('businessUsername').value.trim();
+            const password = document.getElementById('businessPassword').value.trim();
+            const messageDiv = document.getElementById('businessMessage');
+
+            if (!username || !password) {
+                messageDiv.className = 'message error';
+                messageDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Please fill in all fields.';
+                return;
+            }
+
+            // Check credentials
+            const user = credentials['Business'].find(user => user.username === username && user.password === password);
+            if (user) {
+                messageDiv.className = 'message success';
+                messageDiv.innerHTML = '<i class="fas fa-check-circle"></i> Login successful! Redirecting...';
+                // Redirect to business dashboard
+                setTimeout(() => {
+                    window.location.href = 'business_dashboard.html';
+                }, 1000);
+            } else {
+                messageDiv.className = 'message error';
+                messageDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Invalid credentials.';
+            }
+        }
+
+        function handleBusinessSignup() {
+            const businessName = document.getElementById('businessName').value.trim();
+            const username = document.getElementById('businessSignupUsername').value.trim();
+            const password = document.getElementById('businessSignupPassword').value.trim();
+            const confirmPassword = document.getElementById('businessConfirmPassword').value.trim();
+            const panNumber = document.getElementById('businessPAN').value.trim();
+            const messageDiv = document.getElementById('businessMessage');
+
+            if (!businessName || !username || !password || !confirmPassword || !panNumber) {
+                messageDiv.className = 'message error';
+                messageDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Please fill in all fields.';
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                messageDiv.className = 'message error';
+                messageDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Passwords do not match.';
+                return;
+            }
+
+            if (!validatePAN(panNumber)) {
+                messageDiv.className = 'message error';
+                messageDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Invalid PAN number.';
+                return;
+            }
+
+            // Check if username already exists
+            const existingUser = credentials['Business'].find(user => user.username === username);
+            if (existingUser) {
+                messageDiv.className = 'message error';
+                messageDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Username already exists.';
+                return;
+            }
+
+            // Save user
+            credentials['Business'].push({businessName, username, password, panNumber});
+            messageDiv.className = 'message success';
+            messageDiv.innerHTML = '<i class="fas fa-check-circle"></i> Signup successful! Please log in.';
+            // Switch to login tab
+            setTimeout(() => {
+                switchTab('Business', 'login');
+            }, 1500);
+        }
+
+        function handleYouTuberLogin() {
+            const username = document.getElementById('youtuberUsername').value.trim();
+            const password = document.getElementById('youtuberPassword').value.trim();
+            const messageDiv = document.getElementById('youtuberMessage');
+
+            if (!username || !password) {
+                messageDiv.className = 'message error';
+                messageDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Please fill in all fields.';
+                return;
+            }
+
+            // Check credentials
+            const user = credentials['YouTuber'].find(user => user.username === username && user.password === password);
+            if (user) {
+                messageDiv.className = 'message success';
+                messageDiv.innerHTML = '<i class="fas fa-check-circle"></i> Login successful! Redirecting...';
+                // Redirect to YouTuber dashboard
+                setTimeout(() => {
+                    window.location.href = 'youtuber_dashboard.html';
+                }, 1000);
+            } else {
+                messageDiv.className = 'message error';
+                messageDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Invalid credentials.';
+            }
+        }
+
+        function handleYouTuberSignup() {
+            const channelName = document.getElementById('youtuberName').value.trim();
+            const username = document.getElementById('youtuberSignupUsername').value.trim();
+            const password = document.getElementById('youtuberSignupPassword').value.trim();
+            const confirmPassword = document.getElementById('youtuberConfirmPassword').value.trim();
+            const messageDiv = document.getElementById('youtuberMessage');
+
+            if (!channelName || !username || !password || !confirmPassword) {
+                messageDiv.className = 'message error';
+                messageDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Please fill in all fields.';
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                messageDiv.className = 'message error';
+                messageDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Passwords do not match.';
+                return;
+            }
+
+            // Check if username already exists
+            const existingUser = credentials['YouTuber'].find(user => user.username === username);
+            if (existingUser) {
+                messageDiv.className = 'message error';
+                messageDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Username already exists.';
+                return;
+            }
+
+            // Save user
+            credentials['YouTuber'].push({channelName, username, password});
+            messageDiv.className = 'message success';
+            messageDiv.innerHTML = '<i class="fas fa-check-circle"></i> Signup successful! Please log in.';
+            // Switch to login tab
+            setTimeout(() => {
+                switchTab('YouTuber', 'login');
+            }, 1500);
+        }
+
+        function handleAdminLogin() {
+            const username = document.getElementById('adminUsername').value.trim();
+            const password = document.getElementById('adminPassword').value.trim();
+            const messageDiv = document.getElementById('adminMessage');
+
+            if (!username || !password) {
+                messageDiv.className = 'message error';
+                messageDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Please fill in all fields.';
+                return;
+            }
+
+            if (credentials['Admin'].username === username && credentials['Admin'].password === password) {
+                messageDiv.className = 'message success';
+                messageDiv.innerHTML = '<i class="fas fa-check-circle"></i> Login successful! Redirecting...';
+                // Redirect to admin dashboard
+                setTimeout(() => {
+                    window.location.href = 'admin_dashboard.html';
+                }, 1000);
+            } else {
+                messageDiv.className = 'message error';
+                messageDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Invalid credentials.';
+            }
+        }
+
+        // Add event listeners
+        document.getElementById('businessLoginButton').addEventListener('click', handleBusinessLogin);
+        document.getElementById('businessSignupButton').addEventListener('click', handleBusinessSignup);
+        document.getElementById('youtuberLoginButton').addEventListener('click', handleYouTuberLogin);
+        document.getElementById('youtuberSignupButton').addEventListener('click', handleYouTuberSignup);
+        document.getElementById('adminLoginButton').addEventListener('click', handleAdminLogin);
+
+        // Password visibility toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordInputs = document.querySelectorAll('input[type="password"]');
+            passwordInputs.forEach(function(passwordInput) {
+                const togglePassword = document.createElement('i');
+                togglePassword.className = 'fas fa-eye toggle-password';
+                passwordInput.parentNode.appendChild(togglePassword);
+                togglePassword.addEventListener('click', function() {
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    togglePassword.className = `fas fa-${type === 'password' ? 'eye' : 'eye-slash'} toggle-password`;
+                });
+            });
+        });
+
+    </script>
+</body>
+</html>

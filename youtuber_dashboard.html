@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>YouTuber Dashboard</title>
+    <!-- Include Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500,600,700&display=swap" rel="stylesheet">
+    <!-- Include Font Awesome and Animate.css -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --youtube-red: #FF0000;
+            --youtube-dark: #282828;
+            --youtube-black: #0F0F0F;
+            --youtube-grey: #717171;
+            --youtube-light-grey: #F1F1F1;
+            --youtube-white: #FFFFFF;
+            --card-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --hover-shadow: 0 8px 15px rgba(0,0,0,0.2);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            transition: var(--transition);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: var(--youtube-black);
+            color: var(--youtube-white);
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background: var(--youtube-dark);
+            color: var(--youtube-white);
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .logo {
+            color: var(--youtube-red);
+            animation: pulse 2s infinite;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: var(--youtube-dark);
+            padding: 1rem 0;
+            position: sticky;
+            top: 64px; /* Height of header */
+            z-index: 99;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .nav-link {
+            display: inline-flex;
+            align-items: center;
+            color: var(--youtube-white);
+            text-decoration: none;
+            padding: 0.8rem 1.2rem;
+            border-radius: 25px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .nav-link.active {
+            background-color: var(--youtube-red);
+            color: var(--youtube-white);
+        }
+
+        .nav-link:hover:not(.active) {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .nav-link i {
+            margin-right: 8px;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Sections */
+        .section {
+            background: var(--youtube-dark);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: var(--card-shadow);
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        h2 {
+            color: var(--youtube-white);
+            border-bottom: 2px solid var(--youtube-red);
+            padding-bottom: 10px;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Search Bar */
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 25px;
+            font-size: 16px;
+            background: var(--youtube-black);
+            color: var(--youtube-white);
+        }
+
+        .search-bar input:focus {
+            border-color: var(--youtube-red);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.2);
+        }
+
+        .search-bar button {
+            background-color: var(--youtube-red);
+            color: var(--youtube-white);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-bar button:hover {
+            background-color: #E60000;
+            transform: translateY(-2px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        /* Business Grid */
+        .business-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .business-card {
+            background: var(--youtube-dark);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            position: relative;
+            cursor: pointer;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .business-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .business-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .business-card-content {
+            padding: 20px;
+        }
+
+        .business-card h3 {
+            margin: 0 0 10px 0;
+            color: var(--youtube-white);
+        }
+
+        .business-card p {
+            margin: 8px 0;
+            color: var(--youtube-grey);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .business-card button {
+            background-color: var(--youtube-red);
+            color: var(--youtube-white);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .business-card button:hover {
+            background-color: #E60000;
+            transform: translateY(-2px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        /* Rating Section */
+        .rating-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+                align-items: center;
+        }
+
+        .star-rating {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .star-rating i {
+            color: #ddd;
+            cursor: pointer;
+            font-size: 30px;
+            transition: color 0.3s ease;
+        }
+
+        .star-rating i.active {
+            color: #FFD700;
+        }
+
+        .rating-container input {
+            width: 100%;
+            padding: 12px 20px;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 25px;
+            font-size: 16px;
+            background: var(--youtube-black);
+            color: var(--youtube-white);
+            margin-top: 10px;
+        }
+
+        .rating-container input:focus {
+            border-color: var(--youtube-red);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.2);
+        }
+
+        /* Ticket Form */
+        .ticket-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .ticket-form textarea {
+            width: 100%;
+            height: 150px;
+            padding: 15px;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 15px;
+            resize: vertical;
+            font-family: inherit;
+            background: var(--youtube-black);
+            color: var(--youtube-white);
+        }
+
+        .ticket-form textarea:focus {
+            border-color: var(--youtube-red);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.2);
+        }
+
+        .ticket-form button {
+            background-color: var(--youtube-red);
+            color: var(--youtube-white);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .ticket-form button:hover {
+            background-color: #E60000;
+            transform: translateY(-2px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 10px;
+            color: var(--youtube-white);
+            display: none;
+            animation: slideIn 0.5s ease-out;
+            z-index: 1000;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Suggestions */
+        .suggestions {
+            position: absolute;
+            background: var(--youtube-dark);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 5px;
+            max-height: 200px;
+            overflow-y: auto;
+            width: calc(100% - 20px);
+            top: 50px;
+            left: 10px;
+            z-index: 1000;
+            box-shadow: var(--card-shadow);
+        }
+
+        .suggestions div {
+            padding: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--youtube-white);
+        }
+
+        .suggestions div:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                padding: 10px;
+                top: 56px;
+            }
+
+            .nav-link {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .business-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-bar {
+                flex-direction: column;
+            }
+
+            .search-bar button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>
+            <i class="fab fa-youtube logo"></i>
+            YouTuber Dashboard
+        </h1>
+    </header>
+
+    <nav>
+        <a class="nav-link active" data-page="search">
+            <i class="fas fa-search"></i> Search
+        </a>
+        <a class="nav-link" data-page="proposals">
+            <i class="fas fa-paper-plane"></i> Proposals
+        </a>
+        <a class="nav-link" data-page="rate">
+            <i class="fas fa-star"></i> Rate
+        </a>
+        <a class="nav-link" data-page="ticket">
+            <i class="fas fa-ticket-alt"></i> Support
+        </a>
+        <a class="nav-link" data-page="profile">
+            <i class="fas fa-user"></i> Profile
+        </a>
+    </nav>
+
+    <div class="container">
+        <!-- Search Page -->
+        <div id="search" class="page active">
+            <div class="section">
+                <h2><i class="fas fa-search"></i> Find Business Partners</h2>
+                <div class="search-bar">
+                    <input type="text" id="location" placeholder="Location">
+                    <input type="text" id="industry" placeholder="Industry">
+                    <button onclick="searchBusinesses()">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </div>
+                <div id="business-list" class="business-grid">
+                    <!-- Business cards will be displayed here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Proposals Page -->
+        <div id="proposals" class="page">
+            <div class="section">
+                <h2><i class="fas fa-paper-plane"></i> My Proposals</h2>
+                <div id="proposals-list">
+                    <!-- Proposals sent by YouTuber will be displayed here -->
+                    <p>No active proposals yet.</p>
+                </div>
+            </div>
+            <div class="section">
+                <h2><i class="fas fa-inbox"></i> Proposals Received</h2>
+                <div id="received-proposals-list">
+                    <!-- Proposals received from businesses will be displayed here -->
+                    <p>No proposals received yet.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rate Page -->
+        <div id="rate" class="page">
+            <div class="section">
+                <h2><i class="fas fa-star"></i> Rate Collaborations</h2>
+                <div class="rating-container">
+                    <input type="text" id="business-name" placeholder="Enter Business Name">
+                    <div class="star-rating" id="star-rating">
+                        <i class="fas fa-star" data-rating="1"></i>
+                        <i class="fas fa-star" data-rating="2"></i>
+                        <i class="fas fa-star" data-rating="3"></i>
+                        <i class="fas fa-star" data-rating="4"></i>
+                        <i class="fas fa-star" data-rating="5"></i>
+                    </div>
+                    <button onclick="submitRating()">
+                        <i class="fas fa-check"></i> Submit Rating
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Support Ticket Page -->
+        <div id="ticket" class="page">
+            <div class="section">
+                <h2><i class="fas fa-ticket-alt"></i> Support Ticket</h2>
+                <form class="ticket-form" onsubmit="submitTicket(); return false;">
+                    <textarea placeholder="Describe your issue here..."></textarea>
+                    <button type="submit">
+                        <i class="fas fa-paper-plane"></i> Submit Ticket
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Profile Page -->
+        <div id="profile" class="page">
+            <div class="section">
+                <h2><i class="fas fa-user"></i> View Profile</h2>
+                <div class="profile-info">
+                    <p><strong>Name:</strong> <span id="profile-name">Raj Singh</span></p>
+                    <p><strong>Channel:</strong> <span id="profile-channel">TechWithRaj</span></p>
+                    <p><strong>Subscribers:</strong> <span id="profile-subscribers">6,000</span></p>
+                    <p><strong>Email:</strong> <span id="profile-email">raj@example.com</span></p>
+                </div>
+            </div>
+            <div class="section">
+                <h2><i class="fas fa-handshake"></i> Past Collaborations</h2>
+                <div id="past-collaborations-list">
+                    <!-- Past collaborations will be displayed here -->
+                    <p>No past collaborations yet.</p>
+                </div>
+            </div>
+            <div class="section">
+                <h2><i class="fas fa-history"></i> Past Proposals Received</h2>
+                <div id="past-received-proposals-list">
+                    <!-- Past received proposals will be displayed here -->
+                    <p>No past proposals received yet.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // Navigation
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function () {
+                // Update active nav link
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+
+                // Show corresponding page
+                const pageId = this.getAttribute('data-page');
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
+                });
+                document.getElementById(pageId).classList.add('active');
+            });
+        });
+
+        // Sample business data with Indian references
+        const businesses = [
+            {
+                name: 'Ecommerce Hub',
+                location: 'Bengaluru',
+                industry: 'E-commerce',
+                image: 'https://via.placeholder.com/300x200',
+                description: 'One of India\'s leading e-commerce marketplaces.'
+            },
+            {
+                name: 'Z-Delivery',
+                location: 'Bengaluru',
+                industry: 'Food Delivery',
+                image: 'https://via.placeholder.com/300x200',
+                description: 'India\'s largest online food ordering and delivery platform.'
+            },
+            {
+                name: 'Speedy Ev',
+                location: 'Mumbai',
+                industry: 'Transportation',
+                image: 'https://via.placeholder.com/300x200',
+                description: 'Leading ride-sharing company offering a range of vehicles.'
+            },
+            {
+                name: 'Tech Hub',
+                location: 'Pune',
+                industry: 'Electronic Store',
+                image: 'https://via.placeholder.com/300x200',
+                description: 'A Electronic Store availaible  with all latest and famous devices and gadgets at best price ',
+            }
+        ];
+
+        // Proposals tracking
+        let activeProposals = [];
+
+        // Proposals received by the YouTuber
+        let receivedProposals = [
+            {
+                id: 1,
+                business: 'Tech Hub',
+                date: new Date().toLocaleDateString(),
+                type: 'Brand Awareness',
+                details: 'We would like you to come to store and make video on offers and discounts.',
+                amount: '₹5000 - 20,000',
+                status: 'Pending'
+            }
+            // You can add more received proposals here
+        ];
+
+        // Proposals sent by the YouTuber
+        let sentProposals = [];
+
+        // Past Collaborations
+        let pastCollaborations = [
+            // Example:
+            // {
+            //     id: 101,
+            //     business: 'Tech Hub',
+            //     date: '01/01/2023',
+            //     details: 'Reviewed their cloud service platform.',
+            //     rating: 5
+            // }
+        ];
+
+        // Past Proposals Received
+        let pastReceivedProposals = [
+            // Example:
+            // {
+            //     id: 201,
+            //     business: 'Tech Hub',
+            //     date: '01/02/2023',
+            //     type: 'Brand Awareness',
+            //     details: 'We would like you to review our latest cloud service platform.',
+            //     amount: '₹5000 - 20,000',
+            //     status: 'Accepted'
+            // }
+        ];
+
+        function searchBusinesses() {
+            const location = document.getElementById('location').value.toLowerCase();
+            const industry = document.getElementById('industry').value.toLowerCase();
+
+            const results = businesses.filter(business => {
+                return (location === '' || business.location.toLowerCase().includes(location)) &&
+                    (industry === '' || business.industry.toLowerCase().includes(industry));
+            });
+
+            displayBusinesses(results);
+        }
+
+        function displayBusinesses(businesses) {
+            const list = document.getElementById('business-list');
+            list.innerHTML = '';
+
+            if (businesses.length === 0) {
+                list.innerHTML = '<p>No businesses found matching your criteria.</p>';
+                return;
+            }
+
+            businesses.forEach(business => {
+                const card = document.createElement('div');
+                card.className = 'business-card';
+                card.innerHTML = `
+                    <img src="${business.image}" alt="${business.name}">
+                    <div class="business-card-content">
+                        <h3>${business.name}</h3>
+                        <p><i class="fas fa-map-marker-alt"></i> ${business.location}</p>
+                        <p><i class="fas fa-industry"></i> ${business.industry}</p>
+                        <p><i class="fas fa-info-circle"></i> ${business.description}</p>
+                        <button onclick="sendProposal('${business.name}')">
+                            <i class="fas fa-paper-plane"></i> Send Proposal
+                        </button>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.display = 'block';
+            notification.style.backgroundColor = type === 'success' ? '#00C853' : '#D32F2F';
+
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        // Star rating functionality
+        const starRating = document.getElementById('star-rating');
+        const stars = starRating.getElementsByTagName('i');
+        let currentRating = 0;
+
+        for (let i = 0; i < stars.length; i++) {
+            const star = stars[i];
+
+            star.addEventListener('mouseover', function () {
+                highlightStars(i + 1);
+            });
+
+            star.addEventListener('mouseout', function () {
+                highlightStars(currentRating);
+            });
+
+            star.addEventListener('click', function () {
+                currentRating = i + 1;
+                highlightStars(currentRating);
+                showNotification(`${currentRating} stars selected`, 'success');
+            });
+        }
+
+        function highlightStars(count) {
+            for (let i = 0; i < stars.length; i++) {
+                stars[i].classList.toggle('active', i < count);
+            }
+        }
+
+        function submitRating() {
+            const businessName = document.getElementById('business-name').value.trim();
+
+            if (!businessName) {
+                showNotification('Please enter a business name', 'error');
+                return;
+            }
+
+            if (!currentRating) {
+                showNotification('Please select a rating', 'error');
+                return;
+            }
+
+            // Find the collaboration
+            const collaboration = pastCollaborations.find(c => c.business.toLowerCase() === businessName.toLowerCase());
+
+            if (collaboration) {
+                collaboration.rating = currentRating;
+                showNotification(`Rating of ${currentRating} stars submitted for ${businessName}`);
+
+                // Reset form
+                document.getElementById('business-name').value = '';
+                currentRating = 0;
+                highlightStars(0);
+            } else {
+                showNotification('No collaboration found with this business.', 'error');
+            }
+        }
+
+        function sendProposal(businessName) {
+            const proposal = {
+                id: Date.now(),
+                business: businessName,
+                date: new Date().toLocaleDateString(),
+                status: 'Pending'
+            };
+
+            activeProposals.push(proposal);
+            updateProposalsList();
+            showNotification(`Proposal sent to ${businessName}`);
+
+            // Switch to proposals tab
+            document.querySelector('[data-page="proposals"]').click();
+        }
+
+        function updateProposalsList() {
+            const proposalsList = document.getElementById('proposals-list');
+
+            if (activeProposals.length === 0) {
+                proposalsList.innerHTML = '<p>No active proposals yet.</p>';
+                return;
+            }
+
+            proposalsList.innerHTML = `
+                <div class="business-grid">
+                    ${activeProposals.map(proposal => `
+                        <div class="business-card">
+                            <div class="business-card-content">
+                                <h3>${proposal.business}</h3>
+                                <p><i class="fas fa-calendar"></i> Sent on: ${proposal.date}</p>
+                                <p><i class="fas fa-info-circle"></i> Status: ${proposal.status}</p>
+                                <button onclick="withdrawProposal(${proposal.id})">
+                                    <i class="fas fa-times"></i> Withdraw Proposal
+                                </button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function withdrawProposal(proposalId) {
+            activeProposals = activeProposals.filter(p => p.id !== proposalId);
+            updateProposalsList();
+            showNotification('Proposal withdrawn successfully');
+        }
+
+        function submitTicket() {
+            const textarea = document.querySelector('.ticket-form textarea');
+            if (!textarea.value.trim()) {
+                showNotification('Please describe your issue', 'error');
+                return;
+            }
+
+            showNotification('Ticket submitted successfully');
+            textarea.value = '';
+        }
+
+        // Function to update received proposals list
+        function updateReceivedProposalsList() {
+            const receivedList = document.getElementById('received-proposals-list');
+
+            if (receivedProposals.length === 0) {
+                receivedList.innerHTML = '<p>No proposals received yet.</p>';
+                return;
+            }
+
+            receivedList.innerHTML = `
+                <div class="business-grid">
+                    ${receivedProposals.map(proposal => `
+                        <div class="business-card">
+                            <div class="business-card-content">
+                                <h3>${proposal.business}</h3>
+                                <p><i class="fas fa-calendar"></i> Received on: ${proposal.date}</p>
+                                <p><i class="fas fa-briefcase"></i> Type: ${proposal.type}</p>
+                                <p><i class="fas fa-file-alt"></i> Details: ${proposal.details}</p>
+                                <p><i class="fas fa-rupee-sign"></i> Amount: ${proposal.amount}</p>
+                                <p><i class="fas fa-info-circle"></i> Status: ${proposal.status}</p>
+                                <button onclick="acceptProposal(${proposal.id})">
+                                    <i class="fas fa-check"></i> Accept Proposal
+                                </button>
+                                <button onclick="declineProposal(${proposal.id})">
+                                    <i class="fas fa-times"></i> Decline Proposal
+                                </button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function acceptProposal(proposalId) {
+            // Find the proposal index
+            const proposalIndex = receivedProposals.findIndex(p => p.id === proposalId);
+            if (proposalIndex !== -1) {
+                const proposal = receivedProposals[proposalIndex];
+
+                // Remove the proposal from the receivedProposals array
+                receivedProposals.splice(proposalIndex, 1);
+
+                // Add to past collaborations
+                const collaboration = {
+                    id: Date.now(),
+                    business: proposal.business,
+                    date: new Date().toLocaleDateString(),
+                    details: proposal.details,
+                    rating: 0 // To be filled by rating
+                };
+                pastCollaborations.push(collaboration);
+
+                // Add to past received proposals with status
+                const pastProposal = { ...proposal, status: 'Accepted' };
+                pastReceivedProposals.push(pastProposal);
+
+                // Update the UI
+                updateReceivedProposalsList();
+                updatePastCollaborationsList();
+                updatePastReceivedProposalsList();
+                showNotification(`Proposal from ${proposal.business} accepted`);
+            }
+        }
+
+        function declineProposal(proposalId) {
+            // Find the proposal index
+            const proposalIndex = receivedProposals.findIndex(p => p.id === proposalId);
+            if (proposalIndex !== -1) {
+                const proposal = receivedProposals[proposalIndex];
+
+                // Remove the proposal from the receivedProposals array
+                receivedProposals.splice(proposalIndex, 1);
+
+                // Add to past received proposals with status
+                const pastProposal = { ...proposal, status: 'Declined' };
+                pastReceivedProposals.push(pastProposal);
+
+                // Update the UI
+                updateReceivedProposalsList();
+                updatePastReceivedProposalsList();
+                showNotification(`Proposal from ${proposal.business} declined`);
+            }
+        }
+
+        // Function to update past collaborations list
+        function updatePastCollaborationsList() {
+            const pastList = document.getElementById('past-collaborations-list');
+
+            if (pastCollaborations.length === 0) {
+                pastList.innerHTML = '<p>No past collaborations yet.</p>';
+                return;
+            }
+
+            pastList.innerHTML = `
+                <div class="business-grid">
+                    ${pastCollaborations.map(collab => `
+                        <div class="business-card">
+                            <div class="business-card-content">
+                                <h3>${collab.business}</h3>
+                                <p><i class="fas fa-calendar"></i> Collaborated on: ${collab.date}</p>
+                                <p><i class="fas fa-info-circle"></i> Details: ${collab.details}</p>
+                                <p><i class="fas fa-star"></i> Rating: ${collab.rating > 0 ? collab.rating : 'Not rated yet'}</p>
+                                ${collab.rating === 0 ? `
+                                    <button onclick="rateCollaboration('${collab.business}')">
+                                        <i class="fas fa-star"></i> Rate
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // Function to prompt rating for a collaboration
+        function rateCollaboration(businessName) {
+            // Switch to Rate page and pre-fill the business name
+            document.querySelector('[data-page="rate"]').click();
+            document.getElementById('business-name').value = businessName;
+        }
+
+        // Function to update past received proposals list
+        function updatePastReceivedProposalsList() {
+            const pastReceivedList = document.getElementById('past-received-proposals-list');
+
+            if (pastReceivedProposals.length === 0) {
+                pastReceivedList.innerHTML = '<p>No past proposals received yet.</p>';
+                return;
+            }
+
+            pastReceivedList.innerHTML = `
+                <div class="business-grid">
+                    ${pastReceivedProposals.map(proposal => `
+                        <div class="business-card">
+                            <div class="business-card-content">
+                                <h3>${proposal.business}</h3>
+                                <p><i class="fas fa-calendar"></i> Received on: ${proposal.date}</p>
+                                <p><i class="fas fa-briefcase"></i> Type: ${proposal.type}</p>
+                                <p><i class="fas fa-file-alt"></i> Details: ${proposal.details}</p>
+                                <p><i class="fas fa-rupee-sign"></i> Amount: ${proposal.amount}</p>
+                                <p><i class="fas fa-info-circle"></i> Status: ${proposal.status}</p>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function submitRating() {
+            const businessName = document.getElementById('business-name').value.trim();
+
+            if (!businessName) {
+                showNotification('Please enter a business name', 'error');
+                return;
+            }
+
+            if (!currentRating) {
+                showNotification('Please select a rating', 'error');
+                return;
+            }
+
+            // Find the collaboration
+            const collaboration = pastCollaborations.find(c => c.business.toLowerCase() === businessName.toLowerCase());
+
+            if (collaboration) {
+                collaboration.rating = currentRating;
+                showNotification(`Rating of ${currentRating} stars submitted for ${businessName}`);
+
+                // Reset form
+                document.getElementById('business-name').value = '';
+                currentRating = 0;
+                highlightStars(0);
+
+                // Update the Past Collaborations list
+                updatePastCollaborationsList();
+            } else {
+                showNotification('No collaboration found with this business.', 'error');
+            }
+        }
+
+        // Search suggestions with Indian references
+        const industries = ['E-commerce', 'Food Delivery', 'Transportation', 'Technology', 'Finance', 'Healthcare'];
+        const locations = ['Mumbai', 'Delhi', 'Bengaluru', 'Chennai', 'Kolkata', 'Hyderabad', 'Pune', 'Ahmedabad'];
+
+        function setupSearchSuggestions() {
+            const industryInput = document.getElementById('industry');
+            const locationInput = document.getElementById('location');
+
+            // Industry suggestions
+            industryInput.addEventListener('input', function () {
+                const value = this.value.toLowerCase();
+                const suggestions = industries.filter(i =>
+                    i.toLowerCase().includes(value)
+                );
+
+                showSuggestions(suggestions, this);
+            });
+
+            // Location suggestions
+            locationInput.addEventListener('input', function () {
+                const value = this.value.toLowerCase();
+                const suggestions = locations.filter(l =>
+                    l.toLowerCase().includes(value)
+                );
+
+                showSuggestions(suggestions, this);
+            });
+        }
+
+        function showSuggestions(suggestions, inputElement) {
+            // Remove existing suggestions
+            const existingSuggestions = inputElement.parentNode.querySelector('.suggestions');
+            if (existingSuggestions) {
+                existingSuggestions.remove();
+            }
+
+            if (!suggestions.length || !inputElement.value) return;
+
+            const suggestionsList = document.createElement('div');
+            suggestionsList.className = 'suggestions';
+
+            suggestions.forEach(suggestion => {
+                const item = document.createElement('div');
+                item.textContent = suggestion;
+                item.addEventListener('click', () => {
+                    inputElement.value = suggestion;
+                    suggestionsList.remove();
+                    searchBusinesses();
+                });
+                suggestionsList.appendChild(item);
+            });
+
+            inputElement.parentNode.appendChild(suggestionsList);
+        }
+
+        // Function to update past collaborations and proposals on profile page
+        function updateProfilePage() {
+            updatePastCollaborationsList();
+            updatePastReceivedProposalsList();
+        }
+
+        // Initialize
+        window.onload = function () {
+            displayBusinesses(businesses);
+            setupSearchSuggestions();
+            updateProposalsList();
+            updateReceivedProposalsList();
+            updatePastCollaborationsList();
+            updatePastReceivedProposalsList();
+        };
+    </script>
+</body>
+</html>
